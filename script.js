@@ -1,8 +1,11 @@
 let chain = {};
 
-function train() {
-  chain = {};
-  const text = document.getElementById("trainData").value;
+// 페이지 로드 시 학습 자동 실행
+fetch("train.txt")
+  .then(res => res.text())
+  .then(text => train(text));
+
+function train(text) {
   const words = text.split(/\s+/);
 
   for (let i = 0; i < words.length - 1; i++) {
@@ -11,13 +14,11 @@ function train() {
     if (!chain[w]) chain[w] = [];
     chain[w].push(next);
   }
-
-  alert("학습 완료!");
 }
 
 function generate(max = 20) {
   const keys = Object.keys(chain);
-  if (keys.length === 0) return "아직 학습 안 했어.";
+  if (keys.length === 0) return "…";
 
   let word = keys[Math.floor(Math.random() * keys.length)];
   let result = [word];
@@ -42,7 +43,7 @@ function send() {
 
   setTimeout(() => {
     append("ai", generate());
-  }, 400);
+  }, 300);
 }
 
 function append(role, text) {
