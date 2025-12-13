@@ -2,27 +2,24 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>AI 채팅</title>
+  <title>내 말투 AI</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🤖 AI 채팅</h1>
+    <h1>🧠 내 말투 AI</h1>
 
-    <div class="api-key-box">
-      <input type="password" id="apiKey" placeholder="OpenAI API Key 입력" />
-      <button onclick="saveKey()">저장</button>
-    </div>
+    <textarea id="trainData" placeholder="여기에 네가 쓴 문장들 붙여넣기 (줄바꿈 가능)"></textarea>
+    <button onclick="train()">학습하기</button>
 
     <div id="chat"></div>
 
     <div class="input-box">
-      <input type="text" id="userInput" placeholder="메시지 입력..." />
-      <button onclick="sendMessage()">전송</button>
+      <input id="userInput" placeholder="말 걸어봐" />
+      <button onclick="send()">전송</button>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
