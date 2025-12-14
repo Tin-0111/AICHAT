@@ -53,10 +53,15 @@ function saveMemory(userId, memory) {
    메시지 출력
 ========================= */
 function appendMessage(role, text) {
-  const div = document.createElement("div");
-  div.className = `message ${role}`;
-  div.innerText = `${role === "user" ? "나" : "AI"}: ${text}`;
-  chat.appendChild(div);
+  const wrapper = document.createElement("div");
+  wrapper.className = `message ${role}`;
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerText = text;
+
+  wrapper.appendChild(bubble);
+  chat.appendChild(wrapper);
   chat.scrollTop = chat.scrollHeight;
 }
 
