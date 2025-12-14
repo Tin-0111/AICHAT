@@ -1,54 +1,49 @@
-let chain = {};
+const chat = document.getElementById("chat");
 
-// 페이지 로드 시 학습 자동 실행
-fetch("train.txt")
-  .then(res => res.text())
-  .then(text => train(text));
-
-function train(text) {
-  const words = text.split(/\s+/);
-
-  for (let i = 0; i < words.length - 1; i++) {
-    const w = words[i];
-    const next = words[i + 1];
-    if (!chain[w]) chain[w] = [];
-    chain[w].push(next);
-  }
+function saveKey() {
+  const key = document.getElementById("apiKey").value;
+  localStorage.setItem("OPENAI_API_KEY", key);
+  alert("API 키 저장됨");
 }
 
-function generate(max = 20) {
-  const keys = Object.keys(chain);
-  if (keys.length === 0) return "…";
-
-  let word = keys[Math.floor(Math.random() * keys.length)];
-  let result = [word];
-
-  for (let i = 0; i < max; i++) {
-    const next = chain[word];
-    if (!next) break;
-    word = next[Math.floor(Math.random() * next.length)];
-    result.push(word);
-  }
-
-  return result.join(" ");
-}
-
-function send() {
+async function sendMessage() {
   const input = document.getElementById("userInput");
-  const msg = input.value.trim();
-  if (!msg) return;
+  const message = input.value.trim();
+  if (!message) return;
 
-  append("user", msg);
+  appendMessage("user", message);
   input.value = "";
 
-  setTimeout(() => {
-    append("ai", generate());
-  }, 300);
+  const apiKey = localStorage.getItem("OPENAI_API_KEY");
+  if (!apiKey) {
+    appendMessage("ai", "API 키를 먼저 입력하세요.");
+    return;
+  }
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: message }],
+      }),
+    });
+
+    const data = await res.json();
+    appendMessage("ai", data.choices[0].message.content);
+  } catch (e) {
+    appendMessage("ai", "오류 발생");
+  }
 }
 
-function append(role, text) {
+function appendMessage(role, text) {
   const div = document.createElement("div");
-  div.className = role;
-  div.textContent = (role === "user" ? "나: " : "AI: ") + text;
-  document.getElementById("chat").appendChild(div);
+  div.className = `message ${role}`;
+  div.innerText = `${role === "user" ? "나" : "AI"}: ${text}`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
