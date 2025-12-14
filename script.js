@@ -114,13 +114,32 @@ async function sendMessage() {
 
     const data = await res.json();
     const reply = data.choices[0].message.content;
+    const chunks = splitMessages(reply);
+    await appendAIChunks(chunks);
 
-    appendMessage("ai", reply);
+    // 메모리는 합쳐서 저장 (중요)
+    memory.push({
+       role: "assistant",
+       content: chunks.join(" ")
+    });
 
-    memory.push({ role: "assistant", content: reply });
     saveMemory(userId, memory);
 
   } catch (e) {
     appendMessage("ai", "에러남");
+  }
+}
+
+function splitMessages(text) {
+  return text
+    .split(/\n|(?<=[.!?])/)
+    .map(t => t.trim())
+    .filter(t => t.length > 0);
+}
+
+async function appendAIChunks(chunks) {
+  for (const chunk of chunks) {
+    appendMessage("ai", chunk);
+    await new Promise(r => setTimeout(r, 400)); // 0.4초 딜레이
   }
 }
