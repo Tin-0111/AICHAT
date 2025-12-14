@@ -4,8 +4,7 @@
 
 body {
   margin: 0;
-  background: #0f172a;
-  color: #e5e7eb;
+  background: #b2c7da;
   font-family: system-ui, sans-serif;
 }
 
@@ -15,67 +14,93 @@ body {
   flex-direction: column;
   max-width: 600px;
   margin: 0 auto;
+  background: #b2c7da;
 }
 
+/* 상단 */
 header {
   padding: 12px;
   text-align: center;
-  background: #020617;
-  border-bottom: 1px solid #334155;
+  background: #3b82f6;
+  color: white;
+  font-weight: bold;
 }
 
+/* API 입력 */
 .api-box {
   display: flex;
   gap: 5px;
-  padding: 10px;
+  padding: 8px;
+  background: #e5e7eb;
 }
 
 .api-box input {
   flex: 1;
 }
 
+/* 채팅 영역 */
 #chat {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
-  background: #020617;
 }
 
+/* 공통 메시지 */
 .message {
-  margin-bottom: 10px;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+/* AI (왼쪽) */
+.message.ai {
+  justify-content: flex-start;
+}
+
+.message.ai .bubble {
+  background: white;
+  color: #111;
+  border-radius: 12px 12px 12px 0;
+}
+
+/* 사용자 (오른쪽) */
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.user .bubble {
+  background: #fee500;
+  color: #111;
+  border-radius: 12px 12px 0 12px;
+}
+
+/* 말풍선 */
+.bubble {
+  max-width: 70%;
+  padding: 10px 12px;
+  font-size: 14px;
   line-height: 1.4;
+  word-break: break-word;
 }
 
-.user {
-  color: #38bdf8;
-}
-
-.ai {
-  color: #4ade80;
-}
-
+/* 입력창 */
 .input-box {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   padding: 10px;
-  border-top: 1px solid #334155;
-  background: #020617;
+  background: #f9fafb;
 }
 
-input {
+.input-box input {
   flex: 1;
   padding: 10px;
-  background: #020617;
-  border: 1px solid #334155;
-  color: white;
-  border-radius: 6px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
 }
 
-button {
-  padding: 10px 14px;
-  background: #2563eb;
-  border: none;
+.input-box button {
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #3b82f6;
   color: white;
-  border-radius: 6px;
-  cursor: pointer;
+  border: none;
 }
